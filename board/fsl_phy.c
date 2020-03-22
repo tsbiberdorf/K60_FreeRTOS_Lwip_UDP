@@ -53,6 +53,9 @@ extern uint32_t ENET_GetInstance(ENET_Type *base);
  * Variables
  ******************************************************************************/
 
+static phy_speed_t tl_EthernetSpeed = kPHY_Speed10M;
+static phy_duplex_t tl_PhyDuplex = kPHY_HalfDuplex;
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to enet clocks for each instance. */
 extern clock_ip_name_t s_enetClock[FSL_FEATURE_SOC_ENET_COUNT];
@@ -271,6 +274,7 @@ status_t PHY_GetLinkStatus(ENET_Type *base, uint32_t phyAddr, bool *status)
     return result;
 }
 
+#if 0 // original file
 status_t PHY_GetLinkSpeedDuplex(ENET_Type *base, uint32_t phyAddr, phy_speed_t *speed, phy_duplex_t *duplex)
 {
     assert(duplex);
@@ -308,3 +312,47 @@ status_t PHY_GetLinkSpeedDuplex(ENET_Type *base, uint32_t phyAddr, phy_speed_t *
 
     return result;
 }
+#else
+// copied API from MP8000 code
+status_t PHY_GetLinkSpeedDuplex(ENET_Type *base, uint32_t phyAddr, phy_speed_t *speed, phy_duplex_t *duplex)
+{
+    assert(duplex);
+
+    status_t result = kStatus_Success;
+    uint32_t data, ctlReg;
+
+    /* Read the control two register. */
+	result = PHY_Read(base, phyAddr, PHY_CONTROL1_REG, &ctlReg);
+	if (result == kStatus_Success)
+	{
+		data = ctlReg & PHY_CTL1_SPEEDUPLX_MASK;
+		if ((PHY_CTL1_10FULLDUPLEX_MASK == data) || (PHY_CTL1_100FULLDUPLEX_MASK == data))
+		{
+			/* Full duplex. */
+			*duplex = kPHY_FullDuplex;
+			tl_PhyDuplex = kPHY_FullDuplex;
+		}
+		else
+		{
+			/* Half duplex. */
+			*duplex = kPHY_HalfDuplex;
+			tl_PhyDuplex = kPHY_HalfDuplex;
+		}
+
+		data = ctlReg & PHY_CTL1_SPEEDUPLX_MASK;
+		if ((PHY_CTL1_100HALFDUPLEX_MASK == data) || (PHY_CTL1_100FULLDUPLEX_MASK == data))
+		{
+			/* 100M speed. */
+			*speed = kPHY_Speed100M;
+			tl_EthernetSpeed = kPHY_Speed100M;
+		}
+		else
+		{ /* 10M speed. */
+			*speed = kPHY_Speed10M;
+			tl_EthernetSpeed = kPHY_Speed10M;
+		}
+	}
+
+    return result;
+}
+#endif

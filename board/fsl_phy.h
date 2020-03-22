@@ -70,6 +70,13 @@
 #define PHY_CTL2_10FULLDUPLEX_MASK 0x0014U  /*!< The PHY 10M full duplex mask. */
 #define PHY_CTL2_100FULLDUPLEX_MASK 0x0018U /*!< The PHY 100M full duplex mask. */
 
+#define PHY_CTL1_10HALFDUPLEX_MASK 0x0001U  /*!< The PHY 10M half duplex mask. */
+#define PHY_CTL1_100HALFDUPLEX_MASK 0x0002U /*!< The PHY 100M half duplex mask. */
+#define PHY_CTL1_10FULLDUPLEX_MASK 0x0005U  /*!< The PHY 10M full duplex mask. */
+#define PHY_CTL1_100FULLDUPLEX_MASK 0x0006U /*!< The PHY 100M full duplex mask. */
+#define PHY_CTL1_SPEEDUPLX_MASK 0x0007U     /*!< The PHY speed and duplex mask. */
+
+
 /*! @brief Defines the mask flag in basic status register. */
 #define PHY_BSTATUS_LINKSTATUS_MASK 0x0004U  /*!< The PHY link status mask. */
 #define PHY_BSTATUS_AUTONEGABLE_MASK 0x0008U /*!< The PHY auto-negotiation ability mask. */
