@@ -50,6 +50,7 @@ processor_version: 7.0.1
 #define MCG_PLL_DISABLE                                   0U  /*!< MCGPLLCLK disabled */
 #define OSC_CAP0P                                         0U  /*!< Oscillator 0pF capacitor load */
 #define OSC_ER_CLK_DISABLE                                0U  /*!< Disable external reference clock */
+#define SIM_ENET_1588T_CLK_SEL_CLKIN_CLK                  3U  /*!< SDHC clock select: CLKIN (External bypass clock) */
 #define SIM_ENET_RMII_CLK_SEL_CLKIN_CLK                   1U  /*!< SDHC clock select: CLKIN (External bypass clock) */
 #define SIM_OSC32KSEL_RTC32KCLK_CLK                       2U  /*!< OSC32KSEL select: RTC32KCLK clock (32.768kHz) */
 #define SIM_PLLFLLSEL_MCGFLLCLK_CLK                       0U  /*!< PLLFLL select: MCGFLLCLK clock */
@@ -95,6 +96,7 @@ called_from_default_init: true
 outputs:
 - {id: Bus_clock.outFreq, value: 48 MHz}
 - {id: Core_clock.outFreq, value: 96 MHz}
+- {id: ENET1588TSCLK.outFreq, value: 50 MHz}
 - {id: Flash_clock.outFreq, value: 24 MHz}
 - {id: FlexBus_clock.outFreq, value: 48 MHz}
 - {id: LPO_clock.outFreq, value: 1 kHz}
@@ -106,6 +108,7 @@ outputs:
 - {id: System_clock.outFreq, value: 96 MHz}
 settings:
 - {id: MCGMode, value: PEE}
+- {id: ENETTimeSrcConfig, value: 'yes'}
 - {id: MCG.FCRDIV.scale, value: '1', locked: true}
 - {id: MCG.FRDIV.scale, value: '32', locked: true}
 - {id: MCG.IREFS.sel, value: MCG.FRDIV}
@@ -126,6 +129,7 @@ settings:
 - {id: SIM.PLLFLLSEL.sel, value: MCG.MCGPLLCLK}
 - {id: SIM.RMIICLKSEL.sel, value: SIM.ENET_1588_CLK_EXT}
 - {id: SIM.SDHCSRCSEL.sel, value: OSC.OSCERCLK}
+- {id: SIM.TIMESRCSEL.sel, value: SIM.ENET_1588_CLK_EXT}
 sources:
 - {id: OSC.OSC.outFreq, value: 24 MHz, enabled: true}
 - {id: SIM.ENET_1588_CLK_EXT.outFreq, value: 50 MHz, enabled: true}
@@ -193,6 +197,8 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetSimConfig(&simConfig_BOARD_BootClockRUN);
     /* Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKRUN_CORE_CLOCK;
+    /* Set enet timestamp clock source. */
+    CLOCK_SetEnetTime0Clock(SIM_ENET_1588T_CLK_SEL_CLKIN_CLK);
     /* Set RMII clock source. */
     CLOCK_SetRmii0Clock(SIM_ENET_RMII_CLK_SEL_CLKIN_CLK);
 }

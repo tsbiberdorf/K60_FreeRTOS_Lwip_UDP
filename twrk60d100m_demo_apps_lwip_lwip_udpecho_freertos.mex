@@ -129,6 +129,7 @@
                <clock_outputs>
                   <clock_output id="Bus_clock.outFreq" value="48 MHz" locked="false" accuracy=""/>
                   <clock_output id="Core_clock.outFreq" value="96 MHz" locked="false" accuracy=""/>
+                  <clock_output id="ENET1588TSCLK.outFreq" value="50 MHz" locked="false" accuracy=""/>
                   <clock_output id="Flash_clock.outFreq" value="24 MHz" locked="false" accuracy=""/>
                   <clock_output id="FlexBus_clock.outFreq" value="48 MHz" locked="false" accuracy=""/>
                   <clock_output id="LPO_clock.outFreq" value="1 kHz" locked="false" accuracy=""/>
@@ -141,6 +142,7 @@
                </clock_outputs>
                <clock_settings>
                   <setting id="MCGMode" value="PEE" locked="false"/>
+                  <setting id="ENETTimeSrcConfig" value="yes" locked="false"/>
                   <setting id="MCG.FCRDIV.scale" value="1" locked="true"/>
                   <setting id="MCG.FRDIV.scale" value="32" locked="true"/>
                   <setting id="MCG.IREFS.sel" value="MCG.FRDIV" locked="false"/>
@@ -161,6 +163,7 @@
                   <setting id="SIM.PLLFLLSEL.sel" value="MCG.MCGPLLCLK" locked="false"/>
                   <setting id="SIM.RMIICLKSEL.sel" value="SIM.ENET_1588_CLK_EXT" locked="false"/>
                   <setting id="SIM.SDHCSRCSEL.sel" value="OSC.OSCERCLK" locked="false"/>
+                  <setting id="SIM.TIMESRCSEL.sel" value="SIM.ENET_1588_CLK_EXT" locked="false"/>
                </clock_settings>
                <called_from_default_init>true</called_from_default_init>
             </clock_configuration>
@@ -230,7 +233,7 @@
             <component name="system" uuid="26f38461-ce40-48d4-82a2-b5c55924259c" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="34ff4865-2148-4e29-a201-fa7be97a2439" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="02eb085b-9b7f-4e5e-ba82-f82a51ac2bd8" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>
