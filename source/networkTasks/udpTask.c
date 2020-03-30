@@ -1,31 +1,8 @@
 /*
- * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * udpTask.c
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  Created on: Mar 30, 2020
+ *      Author: ThreeBoysTech
  */
 
 /*******************************************************************************
@@ -48,9 +25,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define ORIGINAL_CODE (0)
 
-#if (ORIGINAL_CODE == 1)
 #define EXAMPLE_ENET ENET
 
 /* IP address configuration. */
@@ -129,35 +104,13 @@ static void stack_init(void *arg)
 
     vTaskDelete(NULL);
 }
-#else
-extern void StartUDPTask();
 
-#endif
 
-/*!
- * @brief Main function
- */
-int main(void)
+void StartUDPTask()
 {
-    SYSMPU_Type *base = SYSMPU;
-    BOARD_InitPins();
-    BOARD_BootClockRUN();
-    BOARD_InitDebugConsole();
-    /* Disable SYSMPU. */
-    base->CESR &= ~SYSMPU_CESR_VLD_MASK;
-
-#if (ORIGINAL_CODE == 1)
-
     /* Initialize lwIP from thread */
     if(sys_thread_new("main", stack_init, NULL, INIT_THREAD_STACKSIZE, INIT_THREAD_PRIO) == NULL)
         LWIP_ASSERT("main(): Task creation failed.", 0);
-#else
-    StartUDPTask();
-#endif
-
-    vTaskStartScheduler();
-
-    /* Will not get here unless a task calls vTaskEndScheduler ()*/
-    return 0;
 }
+
 #endif
