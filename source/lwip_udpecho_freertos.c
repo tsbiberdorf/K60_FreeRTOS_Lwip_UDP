@@ -131,6 +131,7 @@ static void stack_init(void *arg)
 }
 #else
 extern void StartUDPTask();
+extern void StartDHCPTask();
 
 #endif
 
@@ -152,7 +153,8 @@ int main(void)
     if(sys_thread_new("main", stack_init, NULL, INIT_THREAD_STACKSIZE, INIT_THREAD_PRIO) == NULL)
         LWIP_ASSERT("main(): Task creation failed.", 0);
 #else
-    StartUDPTask();
+//    StartUDPTask();
+    StartDHCPTask();
 #endif
 
     vTaskStartScheduler();
